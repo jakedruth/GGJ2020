@@ -40,14 +40,17 @@ public class AnimalController : MonoBehaviour
             Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + direction);
             if(otherCollider != null)
             {
-                AnimalController otherAnimal = otherCollider.transform.GetComponent<AnimalController>();
-                
-                // If otherAnimal.name == name
-                // they are the same
-                
-                if(otherAnimal.animalType == AnimalType.Prey && animalType == AnimalType.Predator)
+                if (otherCollider.transform.tag == "Animal")
                 {
-                    // handle eat
+                    AnimalController otherAnimal = otherCollider.transform.GetComponent<AnimalController>();
+
+                    // If otherAnimal.name == name
+                    // they are the same
+
+                    if (otherAnimal.animalType == AnimalType.Prey && animalType == AnimalType.Predator)
+                    {
+                        // handle eat
+                    }
                 }
             }
         }

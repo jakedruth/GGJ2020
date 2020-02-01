@@ -22,12 +22,27 @@ public class RopeController : MonoBehaviour
     {
         if (animatingRopeCoroutine == null)
         {
-            animatingRopeCoroutine = StartCoroutine(AnimateRopeToPoint(point));
+            animatingRopeCoroutine = StartCoroutine(AnimateRopeToPoint(point, onRopeDoneAnimating));
         }
     }
 
-    private IEnumerator AnimateRopeToPoint(Vector3 point)
+    private IEnumerator AnimateRopeToPoint(Vector3 point, Action<Transform> onRopeDoneAnimating)
     {
-        yield return null;
+        Vector3 pos = Vector3.zero;
+        Vector3 target = point - transform.position;
+
+        while (pos != target)
+        {
+            pos = Vector3.MoveTowards(pos, target, ropeMoveSpeed * Time.deltaTime);
+            _line.SetPosition(1, pos);
+            yield return null;
+        }
+
+        if (onRopeDoneAnimating != null)
+        {
+            onRopeDoneAnimating(Physics2D.OverlapPoint(point).transform);
+        }
+
+        animatingRopeCoroutine = null;
     }
 }

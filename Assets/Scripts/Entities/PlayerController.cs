@@ -88,7 +88,9 @@ public class PlayerController : MonoBehaviour
                 RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, ropeLength - 1);
 
                 Vector3 ropePoint = ray.GetPoint(ropeLength);
-                if(hit.transform != null)
+                Action<Transform> onHitCallback = null;
+
+                if (hit.transform != null)
                 {
                     switch (hit.transform.tag)
                     {
@@ -98,11 +100,12 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "Animal":
                             ropePoint = hit.transform.position;
+                            onHitCallback = onRopeHitAnimal;
                             break;
                     }
                 }
 
-                rope.MoveToPoint(ropePoint, OnRopeDoneAnimating);
+                rope.MoveToPoint(ropePoint, onHitCallback);
 
                 //Debug.DrawLine(ray.origin, hitPosition, Color.red, 0.5f);
 
@@ -128,8 +131,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnRopeDoneAnimating(Transform hit)
+    public void onRopeHitAnimal(Transform hit)
     {
-
+        Debug.Log($"Here: {hit}");
     }
 }
