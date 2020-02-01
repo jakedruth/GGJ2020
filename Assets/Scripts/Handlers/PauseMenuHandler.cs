@@ -5,11 +5,10 @@ using UnityEngine;
 
 public class PauseMenuHandler : MonoBehaviour
 {
-    public GameObject pausePanel;
     // Start is called before the first frame update
     void Start()
     {
-        pausePanel.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(false);
         GameManager.instance.OnPause += onTogglePause;
     }
 
@@ -28,10 +27,19 @@ public class PauseMenuHandler : MonoBehaviour
     }
     public void onTogglePause(bool value)
     {
-        pausePanel.SetActive(value);
+        transform.GetChild(0).gameObject.SetActive(value);
     }
     public void ReturnHome()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+    public void RestartLevel()
+    {
+        GameManager.instance.SetPause(false);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void OnDestroy()
+    {
+        GameManager.instance.OnPause -= onTogglePause;
     }
 }
