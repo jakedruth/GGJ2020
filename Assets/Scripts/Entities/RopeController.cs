@@ -23,6 +23,14 @@ public class RopeController : MonoBehaviour
         _line.SetPosition(1, point);
     }
 
+    public void SendOutRopeToPoint(Vector3 point)
+    {
+        if (animatingRopeCoroutine == null)
+        {
+            animatingRopeCoroutine = StartCoroutine(AnimateRopeToPoint(point));
+        }
+    }
+
     public void SendOutRopeToEntity(EntityBase entity, Action<EntityBase> CallBackOnHit)
     {
         if (animatingRopeCoroutine == null)
@@ -37,6 +45,22 @@ public class RopeController : MonoBehaviour
         {
             animatingRopeCoroutine = StartCoroutine(AnimateRopeToPointAndBack(point, callBackOnComplete));
         }
+    }
+
+    private IEnumerator AnimateRopeToPoint(Vector3 point)
+    {
+        Vector3 pos = _line.GetPosition(1);
+        Vector3 target = point;
+
+        while (pos != target)
+        {
+            pos = Vector3.MoveTowards(pos, target, ropeMoveSpeed * Time.deltaTime);
+            _line.SetPosition(1, pos);
+
+            yield return null;
+        }
+
+        animatingRopeCoroutine = null;
     }
 
     private IEnumerator AnimateRopeToPointAndBack(Vector3 point, Action callBackOnComplete)
@@ -100,8 +124,6 @@ public class RopeController : MonoBehaviour
     {
         _followTarget = target;
         Vector3 pos = _line.GetPosition(1);
-        
-        Debug.Log("here");
 
         while (_followTarget != null)
         {

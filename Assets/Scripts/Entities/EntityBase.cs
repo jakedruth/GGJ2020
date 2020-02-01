@@ -11,7 +11,9 @@ public class EntityBase : MonoBehaviour
 
     // Variables
     public float moveSpeed = 15;
-    public bool isMovable;
+    public bool isPushable;
+    public bool isPullable;
+
     public Coroutine MovingCoroutine { get; private set; }
 
     public UnityAction<Vector3, Vector3> OnMove;
@@ -65,7 +67,7 @@ public class EntityBase : MonoBehaviour
                     }
                     else
                     {
-                        if (other.isMovable)
+                        if (other.isPushable)
                         {
                             if (other.Push(dir))
                             {
@@ -80,6 +82,7 @@ public class EntityBase : MonoBehaviour
                         }
                         else
                         {
+                            Debug.Log($"Here");
                             canMove = false;
                             bounce = true;
                         }
