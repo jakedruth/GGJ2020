@@ -44,12 +44,23 @@ public class EntityBase : MonoBehaviour
         bool canMove = false;
         bool bounce = false;
 
-        Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + dir);
+        Collider2D otherCollider = Physics2D.OverlapPoint(targetPoint);
 
         if (otherCollider == null || otherCollider.isTrigger)
         {
-            canMove = true;
-            bounce = false;
+            RaycastHit2D hit2 = Physics2D.Raycast(targetPoint, -dir, dir.magnitude);
+            //Debug.Log($"This: {this.transform} and that: {hit2.transform}");
+
+            if (hit2.transform == this.transform)
+            {
+                canMove = true;
+                bounce = false;
+            }
+            else
+            {
+                canMove = false;
+                bounce = false;
+            }
         }
         else if (otherCollider.transform != transform)
         {
@@ -102,9 +113,6 @@ public class EntityBase : MonoBehaviour
 
         if (canMove)
         {
-            if (OnMove != null)
-                OnMove.Invoke(transform.position, targetPoint);
-
             MovingCoroutine = StartCoroutine(MoveToPosition(targetPoint));            
         }
         else if (bounce)
@@ -122,7 +130,8 @@ public class EntityBase : MonoBehaviour
 
     private IEnumerator MoveToPosition(Vector3 target)
     {
-        Vector3 pos = transform.position;
+        Vector3 start = transform.position;
+        Vector3 pos = start;
 
         while (pos != target)
         {
@@ -132,6 +141,11 @@ public class EntityBase : MonoBehaviour
         }
 
         MovingCoroutine = null;
+
+        if (OnMove != null)
+        {
+            OnMove.Invoke(start, target);
+        }
     }
 
     private IEnumerator BounceOffPosition(Vector3 target, float distancePercentage)
@@ -175,7 +189,17 @@ public class EntityBase : MonoBehaviour
         Vector3 direction = end - start;
         Vector3 target = end - direction.normalized;
 
-        MoveTo(target, true);
+        bool moved = MoveTo(target, false);
+        if(!moved)
+        {
+            Vector3 distance = target - transform.position;
+            if (_followingEntity.tag != "Player")
+            {
+                
+                    StopFollowingEntity();
+            }
+            //StopFollowingEntity();
+        }
     }
 
     private void OnDestroy()
