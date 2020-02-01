@@ -11,20 +11,29 @@ public class EntityBase : MonoBehaviour
 
     // Variables
     public float moveSpeed = 15;
-    private Coroutine movingCoroutine;
+    public Coroutine MovingCoroutine { get; private set; }
 
-    public UnityAction OnMove;
+    public UnityAction<Vector3, Vector3> OnMove;
 
     private void Awake()
     {
         _bounds = GetComponent<BoxCollider2D>();
     }
 
-    public bool MoveTo(Vector3 targetPoint)
+    public bool MoveTo(Vector3 targetPoint, bool ignoreRaycast = false)
     {
         // Check if moving
-        if (movingCoroutine != null)
+        if (MovingCoroutine != null)
             return false;
+
+        if(ignoreRaycast)
+        {
+            if (OnMove != null)
+                OnMove.Invoke(transform.position, targetPoint);
+
+            MovingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
+            return true;
+        }
 
         // Check to see if there is an open spot
         Vector3 dir = targetPoint - transform.position;
@@ -33,7 +42,6 @@ public class EntityBase : MonoBehaviour
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, dir, 1);
         if (hits.Length == 1 && hits[0].transform == transform)
         {
-            movingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
             canMove = true;
             bounce = false;
         }
@@ -50,6 +58,15 @@ public class EntityBase : MonoBehaviour
                 // skip the this collider
                 if (hit.transform == transform)
                     continue;
+
+                EntityBase other = hit.transform.GetComponent<EntityBase>();
+
+                if (other != null && other.MovingCoroutine != null)
+                {
+                    canMove = true;
+                    bounce = false;
+                    continue;
+                }
 
                 // Handle what hit?
                 if (hit.transform.tag == "Wall")
@@ -88,14 +105,14 @@ public class EntityBase : MonoBehaviour
 
         if (canMove)
         {
-            movingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
-
             if (OnMove != null)
-                OnMove.Invoke();
+                OnMove.Invoke(transform.position, targetPoint);
+
+            MovingCoroutine = StartCoroutine(MoveToPosition(targetPoint));            
         }
         else if (bounce)
         {
-            movingCoroutine = StartCoroutine(BounceOffPosition(targetPoint, 0.5f));
+            MovingCoroutine = StartCoroutine(BounceOffPosition(targetPoint, 0.5f));
         }
 
         return canMove;
@@ -112,7 +129,7 @@ public class EntityBase : MonoBehaviour
             yield return null;
         }
 
-        movingCoroutine = null;
+        MovingCoroutine = null;
     }
 
     private IEnumerator BounceOffPosition(Vector3 target, float distancePercentage)
@@ -136,6 +153,6 @@ public class EntityBase : MonoBehaviour
             yield return null;
         }
 
-        movingCoroutine = null;
+        MovingCoroutine = null;
     }
 }

@@ -6,18 +6,18 @@ using UnityEngine;
 public class AnimalController : MonoBehaviour
 {
     // Components
-    private EntityBase _base;
+    private EntityBase entityBase;
     public bool isMovable;
 
     // Start is called before the first frame update
     void Awake()
     {
-        _base = GetComponent<EntityBase>();
+        entityBase = GetComponent<EntityBase>();
     }
 
     public bool MoveInDirection(Vector3 direction)
     {
-        return _base.MoveTo(transform.position + direction.normalized);
+        return entityBase.MoveTo(transform.position + direction.normalized);
     }
 
     public void FollowEntity(EntityBase entity)
@@ -25,8 +25,8 @@ public class AnimalController : MonoBehaviour
         entity.OnMove += OnEntityFollowMove;
     }
 
-    private void OnEntityFollowMove()
+    private void OnEntityFollowMove(Vector3 start, Vector3 end)
     {
-
+        entityBase.MoveTo(start, true);
     }
 }

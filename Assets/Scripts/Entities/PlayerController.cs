@@ -7,16 +7,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Components
-    private EntityBase _base;
+    private EntityBase entityBase;
 
     // variables
-
-
+       
 
     // Start is called before the first frame update
     void Awake()
     {
-        _base = GetComponent<EntityBase>();
+        entityBase = GetComponent<EntityBase>();
     }
 
     // Update is called once per frame
@@ -36,7 +35,29 @@ public class PlayerController : MonoBehaviour
 
         if (input != Vector3.zero)
         {
-            _base.MoveTo(pos + input);
+            entityBase.MoveTo(pos + input);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) )
+        {
+            AnimalController[] animals = FindObjectsOfType<AnimalController>();
+
+            if (animals.Length != 0)
+            {
+                AnimalController closest = null;
+                float closestSqrDist = float.PositiveInfinity;
+                for (int i = 0; i < animals.Length; i++)
+                {
+                    float sqrDist = (animals[i].transform.position - transform.position).sqrMagnitude;
+                    if(sqrDist < closestSqrDist)
+                    {
+                        closest = animals[i];
+                        closestSqrDist = sqrDist;
+                    }
+                }
+
+                closest.FollowEntity(entityBase);
+            }
         }
     }
 }
