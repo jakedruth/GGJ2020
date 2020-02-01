@@ -7,15 +7,21 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Components
-    private EntityBase entityBase;
+    public EntityBase EntityBase { get; private set; }
+    public Transform AimCursor;
 
     // variables
-       
+    public RopeController rope;
+    public float ropeLength;
+    private bool isUsingRope;
+    private EntityBase _lassoedEntity;
+    private Vector3 _lastInput;
 
     // Start is called before the first frame update
     void Awake()
     {
-        entityBase = GetComponent<EntityBase>();
+        EntityBase = GetComponent<EntityBase>();
+        _lastInput = Vector3.down;
     }
 
     // Update is called once per frame
@@ -24,39 +30,84 @@ public class PlayerController : MonoBehaviour
         Vector3 input = Vector3.zero;
         Vector3 pos = transform.position;
 
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
             input.x -= 1;
-        else if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
             input.x += 1;
-        else if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
             input.y -= 1;
-        else if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
             input.y += 1;
 
-        if (input != Vector3.zero)
+        if(input.x != 0 && input.y != 0)
         {
-            entityBase.MoveTo(pos + input);
+            input.y = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) )
+        if(input != Vector3.zero)
         {
-            AnimalController[] animals = FindObjectsOfType<AnimalController>();
+            _lastInput = input;
+        }
 
-            if (animals.Length != 0)
+        Vector3 direction = input == Vector3.zero ? _lastInput : input;
+
+        if (!Input.GetKey(KeyCode.Space))
+        {
+            AimCursor.gameObject.SetActive(false);
+
+            if (Input.GetKeyDown(KeyCode.A) ||
+                Input.GetKeyDown(KeyCode.D) ||
+                Input.GetKeyDown(KeyCode.W) ||
+                Input.GetKeyDown(KeyCode.S))
             {
-                AnimalController closest = null;
-                float closestSqrDist = float.PositiveInfinity;
-                for (int i = 0; i < animals.Length; i++)
-                {
-                    float sqrDist = (animals[i].transform.position - transform.position).sqrMagnitude;
-                    if(sqrDist < closestSqrDist)
-                    {
-                        closest = animals[i];
-                        closestSqrDist = sqrDist;
-                    }
-                }
+                EntityBase.MoveTo(pos + input);
+            }
+        }
+        else
+        {
+            // show aiming
+            if (isUsingRope)
+            {
+                AimCursor.gameObject.SetActive(false);
+            }
+            else
+            {
+                AimCursor.gameObject.SetActive(true);
+                float angle = Vector3.SignedAngle(direction, Vector3.right, Vector3.back);
+                AimCursor.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            }
+        }
 
-                closest.FollowEntity(entityBase);
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (!isUsingRope)
+            {
+                Ray2D ray = new Ray2D(transform.position + direction, direction);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, ropeLength - 1);
+
+                Debug.Log(hit.transform);
+                Vector2 hitPosition = (hit.transform != null) ? hit.point : ray.GetPoint(ropeLength);
+
+                Debug.DrawLine(ray.origin, hitPosition, Color.red, 0.5f);
+
+                //Collider2D other = Physics2D.OverlapPoint(transform.position + direction);
+                //if (other != null)
+                //{
+                //    AnimalController animal = other.transform.GetComponent<AnimalController>();
+                //    if (animal != null)
+                //    {
+                //        _lassoedEntity = animal.EntityBase;
+                //        _lassoedEntity.FollowEntity(EntityBase);
+                //        rope.SetTarget(_lassoedEntity.transform);
+                //        isUsingRope = true;
+                //    }
+                //}
+            }
+            else
+            {
+                isUsingRope = false;
+                //rope.RemoveTarget();
+                //_lassoedEntity.StopFollowingEntity(EntityBase);
             }
         }
     }
