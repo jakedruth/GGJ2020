@@ -9,7 +9,7 @@ public class IndicatorController : MonoBehaviour
     {
         
     }
-    private void OnTriggerEnter2D()
+    private void OnTriggerEnter2D(Collider2D col)
     {
         Destroy(gameObject);
     }
