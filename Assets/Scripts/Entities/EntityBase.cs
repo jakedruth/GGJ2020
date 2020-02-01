@@ -54,6 +54,7 @@ public class EntityBase : MonoBehaviour
         {
             switch (otherCollider.transform.tag)
             {
+                default:
                 case "Wall":
                     canMove = false;
                     bounce = true;

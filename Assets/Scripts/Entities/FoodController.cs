@@ -11,7 +11,7 @@ public class FoodController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        EntityBase = GetComponent<EntityBase>(); 
     }
 
     // Update is called once per frame
