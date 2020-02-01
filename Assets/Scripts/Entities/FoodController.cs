@@ -13,10 +13,4 @@ public class FoodController : MonoBehaviour
     {
         EntityBase = GetComponent<EntityBase>(); 
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
