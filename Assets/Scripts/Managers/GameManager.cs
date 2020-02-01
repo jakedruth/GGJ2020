@@ -13,13 +13,16 @@ public class GameManager : MonoBehaviour
         get { return _isPaused; }
         set
         {
+            if (_isPaused == value)
+                return;
+
             _isPaused = value;
             if (OnPause != null)
-                OnPause.Invoke();
+                OnPause.Invoke(_isPaused);
         }
     }
 
-    public UnityEngine.Events.UnityAction OnPause;
+    public UnityEngine.Events.UnityAction<bool> OnPause;
 
     // Start is called before the first frame update
     void Awake()
@@ -43,8 +46,4 @@ public class GameManager : MonoBehaviour
     {
         return IsPaused = value;
     }
-}
-
-public struct GameData
-{
 }
