@@ -9,6 +9,10 @@ public class PlayerController : MonoBehaviour
     // Components
     private EntityBase _base;
 
+    // variables
+
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -35,6 +39,4 @@ public class PlayerController : MonoBehaviour
             _base.MoveTo(pos + input);
         }
     }
-
-    
 }

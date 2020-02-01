@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+[SelectionBase]
 [RequireComponent(typeof(BoxCollider2D))]
 public class EntityBase : MonoBehaviour
 {
@@ -9,7 +11,9 @@ public class EntityBase : MonoBehaviour
 
     // Variables
     public float moveSpeed = 15;
-    private Coroutine moveingCoroutine;
+    private Coroutine movingCoroutine;
+
+    public UnityAction OnMove;
 
     private void Awake()
     {
@@ -19,34 +23,82 @@ public class EntityBase : MonoBehaviour
     public bool MoveTo(Vector3 targetPoint)
     {
         // Check if moving
-        if (moveingCoroutine == null)
-        {
-            // Check to see if there is an open spot
-            RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, targetPoint - transform.position, 1);
-            if (hits.Length == 1 && hits[0].transform == transform)
-            {
-                moveingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
-                return true;
-            } 
-            else
-            {
-                // Hit something(s)!
-                foreach(RaycastHit2D hit in hits)
-                {
-                    // skip the player collider
-                    if (hit.transform == transform)
-                        continue;
+        if (movingCoroutine != null)
+            return false;
 
-                    // Handle what hit?
-                    if (hit.transform.tag == "Wall")
+        // Check to see if there is an open spot
+        Vector3 dir = targetPoint - transform.position;
+        bool canMove = false;
+        bool bounce = false;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, dir, 1);
+        if (hits.Length == 1 && hits[0].transform == transform)
+        {
+            movingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
+            canMove = true;
+            bounce = false;
+        }
+        else
+        {
+            // Hit something(s)!
+            if(hits.Length > 2)
+            {
+                Debug.LogError("This is to many things");
+            }
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                // skip the this collider
+                if (hit.transform == transform)
+                    continue;
+
+                // Handle what hit?
+                if (hit.transform.tag == "Wall")
+                {
+                    canMove = false;
+                    bounce = true;
+                }
+
+                if (hit.transform.tag == "Animal")
+                {
+                    AnimalController animalController = hit.transform.GetComponent<AnimalController>();
+                    if (animalController != null)
                     {
-                        moveingCoroutine = StartCoroutine(BounceOfPosition(targetPoint, 0.5f));
+                        if (animalController.isMovable)
+                        {
+                            if (animalController.MoveInDirection(dir))
+                            {
+                                canMove = true;
+                                bounce = false;
+                            }
+                            else
+                            {
+                                canMove = false;
+                                bounce = false;
+                            }
+                        }
+                        else
+                        {
+                            canMove = false;
+                            bounce = true;
+                        }
                     }
                 }
             }
         }
 
-        return false;
+        if (canMove)
+        {
+            movingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
+
+            if (OnMove != null)
+                OnMove.Invoke();
+        }
+        else if (bounce)
+        {
+            movingCoroutine = StartCoroutine(BounceOffPosition(targetPoint, 0.5f));
+        }
+
+        return canMove;
     }
 
     private IEnumerator MoveToPosition(Vector3 target)
@@ -60,10 +112,10 @@ public class EntityBase : MonoBehaviour
             yield return null;
         }
 
-        moveingCoroutine = null;
+        movingCoroutine = null;
     }
 
-    private IEnumerator BounceOfPosition(Vector3 target, float distancePercentage)
+    private IEnumerator BounceOffPosition(Vector3 target, float distancePercentage)
     {
         Vector3 start = transform.position;
         Vector3 pos = start;
@@ -84,6 +136,6 @@ public class EntityBase : MonoBehaviour
             yield return null;
         }
 
-        moveingCoroutine = null;
+        movingCoroutine = null;
     }
 }
