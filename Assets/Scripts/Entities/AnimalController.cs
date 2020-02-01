@@ -17,6 +17,7 @@ public class AnimalController : MonoBehaviour
 
     // Variables
     public AnimalType animalType;
+    private EntityBase _followingEntity;
 
     // Start is called before the first frame update
     void Awake()
@@ -48,16 +49,41 @@ public class AnimalController : MonoBehaviour
                     // they are the same
                     if (otherAnimal.name == name)
                     {
-                        Destroy(gameObject);
-                        Destroy(otherAnimal.gameObject);
+                        PairWithAnimal(otherAnimal);
                     }
                     else if (otherAnimal.animalType == AnimalType.Prey && animalType == AnimalType.Predator)
                     {
                         // handle eat
-                        Destroy(otherAnimal.gameObject);
+                        EatOther(otherAnimal);
+                    }
+                }
+                else if (otherCollider.transform.tag == "Food")
+                {
+                    if(animalType != AnimalType.Predator && !EntityBase.isPullable)
+                    {
+                        EntityBase.FollowEntity(otherCollider.GetComponent<EntityBase>());
                     }
                 }
             }
+        }
+    }
+
+    public void PairWithAnimal(AnimalController otherAnimal)
+    {
+        Destroy(gameObject);
+        Destroy(otherAnimal.gameObject);
+    }
+
+    public void EatOther(AnimalController otherAnimal)
+    {
+        Destroy(otherAnimal.gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        if (this != null)
+        {
+            FindObjectOfType<PlayerController>()?.AnimalOnDestroy(this);
         }
     }
 }

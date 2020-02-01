@@ -146,9 +146,17 @@ public class PlayerController : MonoBehaviour
     public void RetractRope()
     {
         isRopeAnimating = false;
-        _lassoedEntity.StopFollowingEntity(EntityBase);
+        _lassoedEntity.StopFollowingEntity();
         _lassoedEntity = null;
         rope.RemoveFollowTarget();
         rope.SendOutRopeToPoint(Vector3.zero);
+    }
+
+    public void AnimalOnDestroy(AnimalController animal)
+    {
+        if (animal == _lassoedEntity)
+        {
+            RetractRope();
+        }
     }
 }

@@ -13,6 +13,7 @@ public class EntityBase : MonoBehaviour
     public float moveSpeed = 15;
     public bool isPushable;
     public bool isPullable;
+    private EntityBase _followingEntity;
 
     public Coroutine MovingCoroutine { get; private set; }
 
@@ -84,7 +85,6 @@ public class EntityBase : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log($"Here");
                             canMove = false;
                             bounce = true;
                         }
@@ -160,16 +160,26 @@ public class EntityBase : MonoBehaviour
 
     public void FollowEntity(EntityBase entity)
     {
+        _followingEntity = entity;
         entity.OnMove += OnEntityFollowMove;
     }
 
-    public void StopFollowingEntity(EntityBase entity)
+    public void StopFollowingEntity()
     {
-        entity.OnMove -= OnEntityFollowMove;
+        if(_followingEntity != null)
+            _followingEntity.OnMove -= OnEntityFollowMove;
     }
 
     private void OnEntityFollowMove(Vector3 start, Vector3 end)
     {
-        MoveTo(start, true);
+        Vector3 direction = end - start;
+        Vector3 target = end - direction.normalized;
+
+        MoveTo(target, true);
+    }
+
+    private void OnDestroy()
+    {
+        StopFollowingEntity();
     }
 }
