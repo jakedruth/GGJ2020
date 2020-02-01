@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     // variables
     public RopeController rope;
     public float ropeLength;
-    private bool isUsingRope;
+    private bool isRopeAnimating;
     
     private EntityBase _lassoedEntity;
     
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 direction = input == Vector3.zero ? _lastInput : input;
 
-        if (!Input.GetKey(KeyCode.Space) && rope.animatingRopeCoroutine == null)
+        if (!Input.GetKey(KeyCode.Space) && !isRopeAnimating)
         {
             AimCursor.gameObject.SetActive(false);
 
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             // show aiming
-            if (isUsingRope)
+            if (_lassoedEntity != null)
             {
                 AimCursor.gameObject.SetActive(false);
             }
@@ -82,13 +82,12 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            if (!isUsingRope)
+            if (_lassoedEntity == null && !isRopeAnimating)
             {
+                isRopeAnimating = true;
+
                 Ray2D ray = new Ray2D(transform.position + direction, direction);
                 RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, ropeLength - 1);
-
-                Vector3 ropePoint = ray.GetPoint(ropeLength);
-                Action<Transform> onHitCallback = null;
 
                 if (hit.transform != null)
                 {
@@ -96,43 +95,46 @@ public class PlayerController : MonoBehaviour
                     {
                         default:
                         case "Wall":
-                            ropePoint = hit.point;
+                            rope.SendOutRopeAndReturn(hit.point, ()=> { isRopeAnimating = false; });
                             break;
                         case "Animal":
-                            ropePoint = hit.transform.position;
-                            onHitCallback = onRopeHitAnimal;
+                            rope.SendOutRopeToEntity(hit.transform.GetComponent<EntityBase>(), onRopeHitAnimal);
                             break;
                     }
                 }
-
-                rope.MoveToPoint(ropePoint, onHitCallback);
-
-                //Debug.DrawLine(ray.origin, hitPosition, Color.red, 0.5f);
-
-                //Collider2D other = Physics2D.OverlapPoint(transform.position + direction);
-                //if (other != null)
-                //{
-                //    AnimalController animal = other.transform.GetComponent<AnimalController>();
-                //    if (animal != null)
-                //    {
-                //        _lassoedEntity = animal.EntityBase;
-                //        _lassoedEntity.FollowEntity(EntityBase);
-                //        rope.SetTarget(_lassoedEntity.transform);
-                //        isUsingRope = true;
-                //    }
-                //}
+                else
+                {
+                    rope.SendOutRopeAndReturn(ray.GetPoint(ropeLength), () => { isRopeAnimating = false; });
+                }
             }
             else
             {
-                isUsingRope = false;
-                //rope.RemoveTarget();
-                //_lassoedEntity.StopFollowingEntity(EntityBase);
+                RetractRope();
             }
         }
     }
 
-    public void onRopeHitAnimal(Transform hit)
+    public void onRopeHitAnimal(EntityBase entityOther)
     {
-        Debug.Log($"Here: {hit}");
+        isRopeAnimating = false;
+        _lassoedEntity = entityOther;
+        _lassoedEntity.FollowEntity(EntityBase);
+
+        // get direction to entity
+        Vector3 displacement = entityOther.transform.position - transform.position;
+        Vector3 direction = displacement.normalized;
+
+        entityOther.MoveTo(transform.position + direction);
+
+        rope.AnimateRopeFollowTransform(_lassoedEntity.transform);
+    }
+
+    public void RetractRope()
+    {
+        isRopeAnimating = false;
+        _lassoedEntity.StopFollowingEntity(EntityBase);
+        _lassoedEntity = null;
+        rope.RemoveFollowTarget();
+        rope.SetRopeEndPoint(Vector3.zero);
     }
 }

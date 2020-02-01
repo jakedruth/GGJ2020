@@ -6380,6 +6380,11 @@ PrefabInstance:
       propertyPath: isMovable
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 856290150233711580, guid: 5b794bd614217da44bddb353fd3a9ef5,
+        type: 3}
+      propertyPath: moveSpeed
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 856290150233711582, guid: 5b794bd614217da44bddb353fd3a9ef5,
         type: 3}
       propertyPath: m_Name
@@ -6439,6 +6444,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 856290150663833761, guid: 5b794bd614217da44bddb353fd3a9ef5,
+        type: 3}
+      propertyPath: ropeMoveSpeed
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b794bd614217da44bddb353fd3a9ef5, type: 3}

@@ -18,17 +18,31 @@ public class RopeController : MonoBehaviour
         _line.SetPosition(1, Vector3.zero);
     }
 
-    public void MoveToPoint(Vector3 point, Action<Transform> onRopeDoneAnimating)
+    public void SetRopeEndPoint(Vector3 point)
+    {
+        _line.SetPosition(1, point);
+    }
+
+    public void SendOutRopeToEntity(EntityBase entity, Action<EntityBase> CallBackOnHit)
     {
         if (animatingRopeCoroutine == null)
         {
-            animatingRopeCoroutine = StartCoroutine(AnimateRopeToPoint(point, onRopeDoneAnimating));
+            animatingRopeCoroutine = StartCoroutine(AnimateRopeToEntity(entity, CallBackOnHit));
         }
     }
 
-    private IEnumerator AnimateRopeToPoint(Vector3 point, Action<Transform> onRopeDoneAnimating)
+    public void SendOutRopeAndReturn(Vector3 point, Action callBackOnComplete)
     {
-        Vector3 pos = Vector3.zero;
+        if (animatingRopeCoroutine == null)
+        {
+            animatingRopeCoroutine = StartCoroutine(AnimateRopeToPointAndBack(point, callBackOnComplete));
+        }
+    }
+
+    private IEnumerator AnimateRopeToPointAndBack(Vector3 point, Action callBackOnComplete)
+    {
+        Vector3 start = Vector3.zero;
+        Vector3 pos = start;
         Vector3 target = point - transform.position;
 
         while (pos != target)
@@ -38,11 +52,66 @@ public class RopeController : MonoBehaviour
             yield return null;
         }
 
-        if (onRopeDoneAnimating != null)
+        while (pos != start)
         {
-            onRopeDoneAnimating(Physics2D.OverlapPoint(point).transform);
+            pos = Vector3.MoveTowards(pos, start, ropeMoveSpeed * Time.deltaTime);
+            _line.SetPosition(1, pos);
+            yield return null;
         }
 
+        callBackOnComplete?.Invoke();
+        animatingRopeCoroutine = null;
+    }
+
+    private IEnumerator AnimateRopeToEntity(EntityBase entity, Action<EntityBase> callBackOnHit)
+    {
+        Vector3 pos = Vector3.zero;
+        Vector3 target = entity.transform.position - transform.position;
+
+        while (pos != target)
+        {
+            pos = Vector3.MoveTowards(pos, target, ropeMoveSpeed * Time.deltaTime);
+            _line.SetPosition(1, pos);
+            yield return null;
+        }
+
+        animatingRopeCoroutine = null;
+
+        callBackOnHit?.Invoke(entity);
+    }
+
+    private Transform _followTarget;
+
+    public void RemoveFollowTarget()
+    {
+        _followTarget = null;
+        animatingRopeCoroutine = null;
+    }
+
+    public void AnimateRopeFollowTransform(Transform target)
+    {
+        if(animatingRopeCoroutine == null)
+        {
+            animatingRopeCoroutine = StartCoroutine(FollowTransform(target));
+        }
+    }
+
+    private IEnumerator FollowTransform(Transform target)
+    {
+        _followTarget = target;
+        Vector3 pos = _line.GetPosition(1);
+        
+        Debug.Log("here");
+
+        while (_followTarget != null)
+        {
+            Vector3 offset = _followTarget.position - transform.position;
+            pos = Vector3.MoveTowards(pos, offset, ropeMoveSpeed * Time.deltaTime);
+            _line.SetPosition(1, pos);
+            yield return null;
+        }
+
+        //_followTarget = null;
         animatingRopeCoroutine = null;
     }
 }
