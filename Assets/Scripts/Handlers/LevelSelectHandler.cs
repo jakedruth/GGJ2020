@@ -16,9 +16,9 @@ public class LevelSelectHandler : MonoBehaviour
     {
         
     }
-    public void SelectLevel(string level)
+    public void SelectLevel(int level)
     {
-        SceneManager.LoadScene(level);
+        SceneManager.LoadScene(level + 1);
         GameManager.instance.SetPause(false);
     }
     public void ReturnHome()

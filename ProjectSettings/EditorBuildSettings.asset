@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/_Scenes/LevelSelectMenu.unity
     guid: 04bbc6cda2f67c44e821ec09cb3242a2
   - enabled: 1
-    path: Assets/_Scenes/TestArea-Tremaine.unity
-    guid: 70540269d3263b94dab9bbd269e266a6
+    path: Assets/_Scenes/Level1.unity
+    guid: 3b93396f6c1ce584f992db76b16c4687
+  - enabled: 1
+    path: Assets/_Scenes/Level2.unity
+    guid: 7615b8e99c272644eaff8f22f22496ba
   m_configObjects: {}
