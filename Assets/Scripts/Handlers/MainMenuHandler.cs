@@ -15,5 +15,6 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void closeGame()
     {
+        GameManager.instance.QuitGame();
     }
 }
