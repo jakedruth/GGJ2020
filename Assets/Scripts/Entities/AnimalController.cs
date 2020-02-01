@@ -32,7 +32,7 @@ public class AnimalController : MonoBehaviour
         Vector3.up
     };
 
-    private void Update()
+    private void FixedUpdate()
     {
 
         foreach (Vector3 direction in directions)
@@ -46,10 +46,15 @@ public class AnimalController : MonoBehaviour
 
                     // If otherAnimal.name == name
                     // they are the same
-
-                    if (otherAnimal.animalType == AnimalType.Prey && animalType == AnimalType.Predator)
+                    if (otherAnimal.name == name)
+                    {
+                        Destroy(gameObject);
+                        Destroy(otherAnimal.gameObject);
+                    }
+                    else if (otherAnimal.animalType == AnimalType.Prey && animalType == AnimalType.Predator)
                     {
                         // handle eat
+                        Destroy(otherAnimal.gameObject);
                     }
                 }
             }
