@@ -97,8 +97,9 @@ public class PlayerController : MonoBehaviour
                         case "Wall":
                             rope.SendOutRopeAndReturn(hit.point, ()=> { isRopeAnimating = false; });
                             break;
+                        case "Food":
                         case "Animal":
-                            rope.SendOutRopeToEntity(hit.transform.GetComponent<EntityBase>(), onRopeHitAnimal);
+                            rope.SendOutRopeToEntity(hit.transform.GetComponent<EntityBase>(), onRopeHitEntity);
                             break;
                     }
                 }
@@ -123,7 +124,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void onRopeHitAnimal(EntityBase entityOther)
+    public void onRopeHitEntity(EntityBase entityOther)
     {
         isRopeAnimating = false;
         _lassoedEntity = entityOther;

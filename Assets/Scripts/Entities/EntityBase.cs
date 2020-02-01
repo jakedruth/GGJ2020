@@ -45,7 +45,7 @@ public class EntityBase : MonoBehaviour
 
         Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + dir);
 
-        if (otherCollider == null)
+        if (otherCollider == null || otherCollider.isTrigger)
         {
             canMove = true;
             bounce = false;
@@ -59,6 +59,7 @@ public class EntityBase : MonoBehaviour
                     canMove = false;
                     bounce = true;
                     break;
+                case "Food":
                 case "Animal":
                     EntityBase other = otherCollider.transform.GetComponent<EntityBase>();
                     if (other != null && other.MovingCoroutine != null)
@@ -88,8 +89,6 @@ public class EntityBase : MonoBehaviour
                             bounce = true;
                         }
                     }
-                    break;
-                case "Food":
                     break;
                 case "Item":
                     break;
