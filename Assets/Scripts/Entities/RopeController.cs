@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class RopeController : MonoBehaviour
     private LineRenderer _line;
     public float ropeMoveSpeed;
 
-    public Coroutine animatingRopeCoroutine;
+    public Coroutine animatingRopeCoroutine { get; private set; }
 
     void Awake()
     {
@@ -17,7 +18,7 @@ public class RopeController : MonoBehaviour
         _line.SetPosition(1, Vector3.zero);
     }
 
-    public void MoveToPoint(Vector3 point)
+    public void MoveToPoint(Vector3 point, Action<Transform> onRopeDoneAnimating)
     {
         if (animatingRopeCoroutine == null)
         {

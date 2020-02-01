@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 15
+  isMovable: 1
 --- !u!114 &4592023277096263379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,4 +167,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0f065757f5d0794f89bb9266aa747fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMovable: 1

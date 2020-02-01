@@ -11,6 +11,7 @@ public class EntityBase : MonoBehaviour
 
     // Variables
     public float moveSpeed = 15;
+    public bool isMovable;
     public Coroutine MovingCoroutine { get; private set; }
 
     public UnityAction<Vector3, Vector3> OnMove;
@@ -39,50 +40,34 @@ public class EntityBase : MonoBehaviour
         Vector3 dir = targetPoint - transform.position;
         bool canMove = false;
         bool bounce = false;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, dir, 1);
-        if (hits.Length == 1 && hits[0].transform == transform)
+
+        Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + dir);
+
+        if (otherCollider == null)
         {
             canMove = true;
             bounce = false;
         }
-        else
+        else if (otherCollider.transform != transform)
         {
-            // Hit something(s)!
-            if(hits.Length > 2)
+            switch (otherCollider.transform.tag)
             {
-                Debug.LogError("This is to many things");
-            }
-
-            foreach (RaycastHit2D hit in hits)
-            {
-                // skip the this collider
-                if (hit.transform == transform)
-                    continue;
-
-                EntityBase other = hit.transform.GetComponent<EntityBase>();
-
-                if (other != null && other.MovingCoroutine != null)
-                {
-                    canMove = true;
-                    bounce = false;
-                    continue;
-                }
-
-                // Handle what hit?
-                if (hit.transform.tag == "Wall")
-                {
+                case "Wall":
                     canMove = false;
                     bounce = true;
-                }
-
-                if (hit.transform.tag == "Animal")
-                {
-                    AnimalController animalController = hit.transform.GetComponent<AnimalController>();
-                    if (animalController != null)
+                    break;
+                case "Animal":
+                    EntityBase other = otherCollider.transform.GetComponent<EntityBase>();
+                    if (other != null && other.MovingCoroutine != null)
                     {
-                        if (animalController.isMovable)
+                        canMove = true;
+                        bounce = false;
+                    }
+                    else
+                    {
+                        if (other.isMovable)
                         {
-                            if (animalController.MoveInDirection(dir))
+                            if (other.Push(dir))
                             {
                                 canMove = true;
                                 bounce = false;
@@ -99,8 +84,17 @@ public class EntityBase : MonoBehaviour
                             bounce = true;
                         }
                     }
-                }
+                    break;
+                case "Food":
+                    break;
+                case "Item":
+                    break;
             }
+        }
+        else
+        {
+            canMove = true;
+            bounce = false;
         }
 
         if (canMove)
@@ -116,6 +110,11 @@ public class EntityBase : MonoBehaviour
         }
 
         return canMove;
+    }
+
+    public bool Push(Vector3 direction)
+    {
+        return MoveTo(transform.position + direction.normalized);
     }
 
     private IEnumerator MoveToPosition(Vector3 target)
@@ -154,5 +153,20 @@ public class EntityBase : MonoBehaviour
         }
 
         MovingCoroutine = null;
+    }
+
+    public void FollowEntity(EntityBase entity)
+    {
+        entity.OnMove += OnEntityFollowMove;
+    }
+
+    public void StopFollowingEntity(EntityBase entity)
+    {
+        entity.OnMove -= OnEntityFollowMove;
+    }
+
+    private void OnEntityFollowMove(Vector3 start, Vector3 end)
+    {
+        MoveTo(start, true);
     }
 }

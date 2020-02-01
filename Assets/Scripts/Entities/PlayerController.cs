@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour
     public RopeController rope;
     public float ropeLength;
     private bool isUsingRope;
+    
     private EntityBase _lassoedEntity;
+    
     private Vector3 _lastInput;
 
     // Start is called before the first frame update
@@ -51,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 direction = input == Vector3.zero ? _lastInput : input;
 
-        if (!Input.GetKey(KeyCode.Space))
+        if (!Input.GetKey(KeyCode.Space) && rope.animatingRopeCoroutine == null)
         {
             AimCursor.gameObject.SetActive(false);
 
@@ -85,10 +87,24 @@ public class PlayerController : MonoBehaviour
                 Ray2D ray = new Ray2D(transform.position + direction, direction);
                 RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, ropeLength - 1);
 
-                Debug.Log(hit.transform);
-                Vector2 hitPosition = (hit.transform != null) ? hit.point : ray.GetPoint(ropeLength);
+                Vector3 ropePoint = ray.GetPoint(ropeLength);
+                if(hit.transform != null)
+                {
+                    switch (hit.transform.tag)
+                    {
+                        default:
+                        case "Wall":
+                            ropePoint = hit.point;
+                            break;
+                        case "Animal":
+                            ropePoint = hit.transform.position;
+                            break;
+                    }
+                }
 
-                Debug.DrawLine(ray.origin, hitPosition, Color.red, 0.5f);
+                rope.MoveToPoint(ropePoint, OnRopeDoneAnimating);
+
+                //Debug.DrawLine(ray.origin, hitPosition, Color.red, 0.5f);
 
                 //Collider2D other = Physics2D.OverlapPoint(transform.position + direction);
                 //if (other != null)
@@ -110,5 +126,10 @@ public class PlayerController : MonoBehaviour
                 //_lassoedEntity.StopFollowingEntity(EntityBase);
             }
         }
+    }
+
+    public void OnRopeDoneAnimating(Transform hit)
+    {
+
     }
 }
