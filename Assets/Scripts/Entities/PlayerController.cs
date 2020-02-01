@@ -112,19 +112,32 @@ public class PlayerController : MonoBehaviour
                 RetractRope();
             }
         }
+
+        if(_lassoedEntity != null)
+        {
+            Vector3 displacement = _lassoedEntity.transform.position - transform.position;
+            if(displacement.sqrMagnitude > ropeLength * ropeLength)
+            {
+                RetractRope();
+            }
+        }
     }
 
     public void onRopeHitAnimal(EntityBase entityOther)
     {
         isRopeAnimating = false;
         _lassoedEntity = entityOther;
-        _lassoedEntity.FollowEntity(EntityBase);
 
-        // get direction to entity
-        Vector3 displacement = entityOther.transform.position - transform.position;
-        Vector3 direction = displacement.normalized;
+        if (_lassoedEntity.isPullable)
+        {
+            _lassoedEntity.FollowEntity(EntityBase);
 
-        entityOther.MoveTo(transform.position + direction);
+            // get direction to entity
+            Vector3 displacement = entityOther.transform.position - transform.position;
+            Vector3 direction = displacement.normalized;
+
+            entityOther.MoveTo(transform.position + direction);
+        }
 
         rope.AnimateRopeFollowTransform(_lassoedEntity.transform);
     }
@@ -135,6 +148,6 @@ public class PlayerController : MonoBehaviour
         _lassoedEntity.StopFollowingEntity(EntityBase);
         _lassoedEntity = null;
         rope.RemoveFollowTarget();
-        rope.SetRopeEndPoint(Vector3.zero);
+        rope.SendOutRopeToPoint(Vector3.zero);
     }
 }
