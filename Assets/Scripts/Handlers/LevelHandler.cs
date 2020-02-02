@@ -30,6 +30,10 @@ public class LevelHandler : MonoBehaviour
         }
         else
         {
+            if (GameManager.instance.data.levelsBeaten <= SceneManager.GetActiveScene().buildIndex - 2)
+            {
+                GameManager.instance.data.levelsBeaten = SceneManager.GetActiveScene().buildIndex - 1;
+            }
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
