@@ -96,6 +96,8 @@ public class AnimalController : MonoBehaviour
         SoundManager.instance.Play("Pop");
         EmoteSystemManager.instance.CreateEmote(point, "hearts");
 
+        LevelHandler.current.SaveAnimal(2);
+
         Destroy(gameObject);
         Destroy(otherAnimal.gameObject);
     }

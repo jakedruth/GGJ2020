@@ -81,6 +81,7 @@ public class EntityBase : MonoBehaviour
                 case "Wall":
                     canMove = false;
                     bounce = true;
+                    SoundManager.instance.Play("False");
                     break;
                 case "Food":
                 case "Animal":
