@@ -13,7 +13,7 @@ public enum AnimalType
 public class AnimalController : MonoBehaviour
 {
     // Components
-    public EntityBase EntityBase { get; private set; }
+    public EntityBase Entity { get; private set; }
 
     // Variables
     public AnimalType animalType;
@@ -22,7 +22,7 @@ public class AnimalController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        EntityBase = GetComponent<EntityBase>();
+        Entity = GetComponent<EntityBase>();
     }
 
     public static readonly Vector3[] directions =
@@ -35,23 +35,37 @@ public class AnimalController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach (Vector3 direction in directions)
+        if (Entity.MovingCoroutine == null)
         {
-            Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + direction);
-
-            if (otherCollider != null)
+            foreach (Vector3 direction in directions)
             {
-                if (otherCollider.transform == transform)
-                {
-                    continue;
-                }
-                else if (otherCollider.transform.tag == "Animal")
-                {
-                    AnimalController otherAnimal = otherCollider.transform.GetComponent<AnimalController>();
+                Vector3 displacement = direction * 0.75f;
+                Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + displacement);
 
-                    // If otherAnimal.name == name
-                    // they are the same
-                    if (otherAnimal.name == name)
+                if (otherCollider == null)
+                    continue;
+
+                if (otherCollider.transform == transform)
+                    continue;
+
+                EntityBase otherEntity = otherCollider.transform.GetComponent<EntityBase>();
+                if (otherEntity == null)
+                    continue;
+
+                if (otherEntity.MovingCoroutine != null)
+                    continue;
+
+                if (otherCollider.transform.tag == "Animal")
+                {
+                    AnimalController otherAnimal = otherEntity.GetComponent<AnimalController>();
+
+                    if (otherAnimal == null)
+                        continue;
+
+                    string myName = name.Split(' ')[0];
+                    string otherName = otherAnimal.name.Split(' ')[0];
+
+                    if (myName.Equals(otherName))
                     {
                         PairWithAnimal(otherAnimal);
                     }
@@ -63,12 +77,12 @@ public class AnimalController : MonoBehaviour
                 }
                 else if (otherCollider.transform.tag == "Food")
                 {
-                    if (animalType != AnimalType.Predator && !EntityBase.isPullable)
+                    if (animalType != AnimalType.Predator && !Entity.isPullable)
                     {
-                        if (!EntityBase.IsFollowing)
+                        if (!Entity.IsFollowing && !otherEntity.IsBeingFollowed)
                         {
                             EmoteSystemManager.instance.CreateEmote(transform, "hungry");
-                            EntityBase.FollowEntity(otherCollider.GetComponent<EntityBase>());
+                            Entity.FollowEntity(otherCollider.GetComponent<EntityBase>());
                         }
                     }
                 }
@@ -94,7 +108,7 @@ public class AnimalController : MonoBehaviour
     {
         if (this != null)
         {
-            FindObjectOfType<PlayerController>()?.AnimalOnDestroy(EntityBase);
+            FindObjectOfType<PlayerController>()?.AnimalOnDestroy(Entity);
         }
     }
 }
