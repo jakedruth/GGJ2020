@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EntityBase))]
+[RequireComponent(typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
     // Components
     public EntityBase Entity { get; private set; }
+    public Animator animator { get; private set; }
+
     public Transform AimCursor;
 
     // variables
@@ -24,7 +27,12 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         Entity = GetComponent<EntityBase>();
+        animator = GetComponent<Animator>();
+
         _lastInput = Vector3.down;
+
+        animator.SetFloat("xSpeed", _lastInput.x);
+        animator.SetFloat("ySpeed", _lastInput.y);
     }
 
     // Update is called once per frame
@@ -68,6 +76,9 @@ public class PlayerController : MonoBehaviour
                 Input.GetKeyDown(KeyCode.W) ||
                 Input.GetKeyDown(KeyCode.S))
             {
+                animator.SetFloat("xSpeed", _lastInput.x);
+                animator.SetFloat("ySpeed", _lastInput.y);
+
                 Entity.TryMoveTo(pos + input);
             }
         }
@@ -92,6 +103,9 @@ public class PlayerController : MonoBehaviour
             {
                 SoundManager.instance.Play("Lasso");
                 isRopeAnimating = true;
+
+                animator.SetFloat("xSpeed", _lastInput.x);
+                animator.SetFloat("ySpeed", _lastInput.y);
 
                 Ray2D ray = new Ray2D(transform.position + direction, direction);
                 RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, ropeLength - 1);
