@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+        data = new GameData();
     }
 
     public bool TogglePause()

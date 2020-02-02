@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct GameData
+public class GameData
 {
-
+    public int levelsBeaten = 0;
 }
