@@ -137,10 +137,11 @@ public class PlayerController : MonoBehaviour
 
         if (_lassoedEntity.isPullable)
         {
-            EmoteSystemManager.instance.CreateEmote(transform, "exclamation");
-            
+
             if(_lassoedEntity.tag == "Animal")
                 EmoteSystemManager.instance.CreateEmote(_lassoedEntity.transform, "alert");
+            else
+                EmoteSystemManager.instance.CreateEmote(transform, "exclamation");
 
             _lassoedEntity.FollowEntity(EntityBase);
 
@@ -152,7 +153,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            EmoteSystemManager.instance.CreateEmote(entityOther.transform, "exclamations");
+            EmoteSystemManager.instance.CreateEmote(entityOther.transform, "anger");
         }
 
         rope.AnimateRopeFollowTransform(_lassoedEntity.transform);

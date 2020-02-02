@@ -67,6 +67,7 @@ public class AnimalController : MonoBehaviour
                     {
                         if (!EntityBase.IsFollowing)
                         {
+                            EmoteSystemManager.instance.CreateEmote(transform, "hungry");
                             EntityBase.FollowEntity(otherCollider.GetComponent<EntityBase>());
                         }
                     }
@@ -77,7 +78,8 @@ public class AnimalController : MonoBehaviour
 
     public void PairWithAnimal(AnimalController otherAnimal)
     {
-//PlayerController pc = FindObjectOfType<PlayerController>();
+        Vector3 point = Vector3.Lerp(transform.position, otherAnimal.transform.position, .5f);
+        EmoteSystemManager.instance.CreateEmote(point, "hearts");
 
         Destroy(gameObject);
         Destroy(otherAnimal.gameObject);

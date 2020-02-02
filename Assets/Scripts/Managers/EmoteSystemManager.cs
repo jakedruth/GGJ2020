@@ -18,6 +18,24 @@ public class EmoteSystemManager : MonoBehaviour
         instance = this;
     }
 
+    public void CreateEmote(Vector3 point, string emoteName,
+        float lifeTime = 0.6f, float shakeAmplitude = 15f, float shakePeriod = 25f)
+    {
+        string prefabPath = $"Prefabs/EmoteBase";
+        string spritePath = $"Images/Emotes/emote_{emoteName}";
+
+        SpriteRenderer emotePrefab = Resources.Load<SpriteRenderer>(prefabPath);
+        Sprite spriteOrig = Resources.Load<Sprite>(spritePath);
+
+        SpriteRenderer emote = Instantiate(emotePrefab);
+
+        emote.sprite = spriteOrig;
+
+        emote.transform.position = point;
+
+        AnimateEmote(emote, lifeTime, shakeAmplitude, shakePeriod);
+    }
+
     public void CreateEmote(Transform pointOfOrigin, string emoteName, 
         float lifeTime = 0.6f, float shakeAmplitude = 15f, float shakePeriod = 25f )
     {
@@ -38,6 +56,13 @@ public class EmoteSystemManager : MonoBehaviour
         float lifeTime, float shakeAmplitude, float shakePeriod)
     {
         StartCoroutine(AnimatePosition(emote, followTransfrom));
+        StartCoroutine(AnimateWiggle(emote, shakeAmplitude, shakePeriod));
+        Destroy(emote.gameObject, lifeTime);
+    }
+
+    private void AnimateEmote(SpriteRenderer emote,
+        float lifeTime, float shakeAmplitude, float shakePeriod)
+    {
         StartCoroutine(AnimateWiggle(emote, shakeAmplitude, shakePeriod));
         Destroy(emote.gameObject, lifeTime);
     }
