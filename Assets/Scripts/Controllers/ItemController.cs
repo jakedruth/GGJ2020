@@ -31,9 +31,10 @@ public class ItemController : MonoBehaviour
                 pc.SetCanUseRope(true);
                 Destroy(gameObject);
                 return true;
+            case ItemType.Crate:
+            default:
+                return false;
         }
-
-        return false;
     }
 
     //public void OnTriggerEnter2D(Collider2D collision)
