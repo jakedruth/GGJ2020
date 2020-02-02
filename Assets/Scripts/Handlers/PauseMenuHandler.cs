@@ -20,6 +20,16 @@ public class PauseMenuHandler : MonoBehaviour
             togglePause();
         }
     }
+    public void ToggleMusic(string name)
+    {
+        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(!transform.GetChild(0).GetChild(0).GetChild(0).gameObject.activeInHierarchy);
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(!transform.GetChild(0).GetChild(0).GetChild(1).gameObject.activeInHierarchy);
+        SoundManager.instance.Mute(name);
+    }
+    public void ToggleSFX(string name)
+    {
+
+    }
 
     public void togglePause()
     {
