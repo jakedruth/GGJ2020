@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class LevelHandler : MonoBehaviour
 {
     public List<AnimalController> animalList;
+    private bool loadingNextScene = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,20 +30,22 @@ public class LevelHandler : MonoBehaviour
                 }
             }
         }
-        else
+        else if(!loadingNextScene)
         {
+            loadingNextScene = true;
             if (GameManager.instance.data.levelsBeaten <= SceneManager.GetActiveScene().buildIndex - 2)
             {
                 GameManager.instance.data.levelsBeaten = SceneManager.GetActiveScene().buildIndex - 1;
             }
 
-            EmoteSystemManager.instance.CreateEmote(FindObjectOfType<PlayerController>().transform, "faceHappy");
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex + 1));
         }
     }
 
     private IEnumerator LoadScene(int index)
     {
+        EmoteSystemManager.instance.CreateEmote(FindObjectOfType<PlayerController>().transform, "faceHappy", 2f);
+        
         yield return new WaitForSeconds(3f);
 
         if (index < SceneManager.sceneCountInBuildSettings)

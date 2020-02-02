@@ -5,6 +5,7 @@ using UnityEngine;
 public enum ItemType
 {
     Lasso,
+    Crate
 }
 
 [RequireComponent(typeof(EntityBase))]
@@ -21,17 +22,18 @@ public class ItemController : MonoBehaviour
         Entity = transform.GetComponent<EntityBase>();
     }
 
-    public void PickUp()
+    public bool TryPickUp()
     {
         switch (itemType)
         {
             case ItemType.Lasso:
                 PlayerController pc = FindObjectOfType<PlayerController>();
                 pc.SetCanUseRope(true);
-                break;
+                Destroy(gameObject);
+                return true;
         }
 
-        Destroy(gameObject);
+        return false;
     }
 
     //public void OnTriggerEnter2D(Collider2D collision)

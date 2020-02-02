@@ -117,41 +117,50 @@ public class EntityBase : MonoBehaviour
                     }
                     break;
                 case "Item":
-                    // if you are the player, pick it up
-                    // if you are an animal, try to push it
+                    
                     if (other == null || other.MovingCoroutine != null)
                     {
                         canMove = false;
                         bounce = true;
+                        break;
                     }
-                    else if (tag == "Player")
+
+                    ItemController item = other.GetComponent<ItemController>();
+
+                    // if you are the player, pick it up
+                    if (tag == "Player")
                     {
-                        canMove = true;
-                        bounce = false;
-                        other.GetComponent<ItemController>().PickUp();
-                    }
-                    else
-                    {
-                        if (other.isPushable)
+                        if(item.TryPickUp())
                         {
-                            if (other.TryPush(dir))
-                            {
-                                canMove = true;
-                                bounce = false;
-                            }
-                            else
-                            {
-                                canMove = false;
-                                bounce = true;
-                            }
+                            canMove = true;
+                            bounce = false;
+                            EmoteSystemManager.instance.CreateEmote(transform, "star");
+                            break;
+                        }
+                    }
+
+                    if (other.isPushable)
+                    {
+                        if (other.TryPush(dir))
+                        {
+                            canMove = true;
+                            bounce = false;
                         }
                         else
                         {
-                            //EmoteSystemManager.instance.CreateEmote(other.transform, "anger");
                             canMove = false;
                             bounce = true;
                         }
                     }
+                    else
+                    {
+                        //EmoteSystemManager.instance.CreateEmote(other.transform, "anger");
+                        canMove = false;
+                        bounce = true;
+                    }
+
+
+
                     break;
             }
         }
