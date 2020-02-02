@@ -97,12 +97,16 @@ public class EntityBase : MonoBehaviour
                             }
                             else
                             {
+                                if(other.tag == "Animal")
+                                    EmoteSystemManager.instance.CreateEmote(other.transform, "faceAngry");
+                                
                                 canMove = false;
                                 bounce = false;
                             }
                         }
                         else
                         {
+                            EmoteSystemManager.instance.CreateEmote(other.transform, "anger");
                             canMove = false;
                             bounce = true;
                         }
