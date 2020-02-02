@@ -13,6 +13,8 @@ public class EntityBase : MonoBehaviour
     public float moveSpeed = 15;
     public bool isPushable;
     public bool isPullable;
+
+    public bool IsFollowing { get { return _followingEntity != null; } }
     private EntityBase _followingEntity;
 
     public Coroutine MovingCoroutine { get; private set; }
@@ -179,6 +181,9 @@ public class EntityBase : MonoBehaviour
 
     public void FollowEntity(EntityBase entity)
     {
+        if (_followingEntity != null)
+            StopFollowingEntity();
+
         _followingEntity = entity;
         entity.OnMove += OnEntityFollowMove;
     }
@@ -187,6 +192,8 @@ public class EntityBase : MonoBehaviour
     {
         if(_followingEntity != null)
             _followingEntity.OnMove -= OnEntityFollowMove;
+
+        _followingEntity = null;
     }
 
     private void OnEntityFollowMove(Vector3 start, Vector3 end)

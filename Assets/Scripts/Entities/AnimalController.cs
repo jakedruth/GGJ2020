@@ -35,7 +35,6 @@ public class AnimalController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         foreach (Vector3 direction in directions)
         {
             Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + direction);
@@ -59,9 +58,12 @@ public class AnimalController : MonoBehaviour
                 }
                 else if (otherCollider.transform.tag == "Food")
                 {
-                    if(animalType != AnimalType.Predator && !EntityBase.isPullable)
+                    if (animalType != AnimalType.Predator && !EntityBase.isPullable)
                     {
-                        EntityBase.FollowEntity(otherCollider.GetComponent<EntityBase>());
+                        if (!EntityBase.IsFollowing)
+                        {
+                            EntityBase.FollowEntity(otherCollider.GetComponent<EntityBase>());
+                        }
                     }
                 }
             }
