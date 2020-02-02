@@ -829,7 +829,7 @@ GameObject:
   - component: {fileID: 187870976}
   - component: {fileID: 187870975}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6743,7 +6743,7 @@ PrefabInstance:
     - target: {fileID: 6600916210045150360, guid: bb13ef3a83e89c5448ff94feb4240bde,
         type: 3}
       propertyPath: m_Name
-      value: Main Camera (1)
+      value: Main Camera
       objectReference: {fileID: 0}
     - target: {fileID: 6600916210045150364, guid: bb13ef3a83e89c5448ff94feb4240bde,
         type: 3}
@@ -7566,12 +7566,12 @@ PrefabInstance:
     - target: {fileID: 4592023277096263378, guid: 460641e7e5e1ae944950a5c152e5cb51,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4592023277096263378, guid: 460641e7e5e1ae944950a5c152e5cb51,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4592023277096263378, guid: 460641e7e5e1ae944950a5c152e5cb51,
         type: 3}
