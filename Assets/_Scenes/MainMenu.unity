@@ -1813,6 +1813,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1927891961, guid: 6a3896b91a83f514eb4962a258356b1d, type: 3}
+      propertyPath: sounds.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927891961, guid: 6a3896b91a83f514eb4962a258356b1d, type: 3}
+      propertyPath: sounds.Array.data[8].name
+      value: Falling
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927891961, guid: 6a3896b91a83f514eb4962a258356b1d, type: 3}
+      propertyPath: sounds.Array.data[8].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7dcf84bf2f7aba644ae25dded1d49b56, type: 3}
+    - target: {fileID: 1927891961, guid: 6a3896b91a83f514eb4962a258356b1d, type: 3}
+      propertyPath: sounds.Array.data[8].volume
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1927891961, guid: 6a3896b91a83f514eb4962a258356b1d, type: 3}
+      propertyPath: sounds.Array.data[8].pitch
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5131779454219836747, guid: 6a3896b91a83f514eb4962a258356b1d,
         type: 3}
       propertyPath: m_LocalPosition.x
