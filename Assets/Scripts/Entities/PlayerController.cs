@@ -30,6 +30,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            EmoteSystemManager.instance.CreateEmote(transform, "alert");
+        }
+
         Vector3 input = Vector3.zero;
         Vector3 pos = transform.position;
 
@@ -132,6 +137,11 @@ public class PlayerController : MonoBehaviour
 
         if (_lassoedEntity.isPullable)
         {
+            EmoteSystemManager.instance.CreateEmote(transform, "exclamation");
+            
+            if(_lassoedEntity.tag == "Animal")
+                EmoteSystemManager.instance.CreateEmote(_lassoedEntity.transform, "alert");
+
             _lassoedEntity.FollowEntity(EntityBase);
 
             // get direction to entity
@@ -139,6 +149,10 @@ public class PlayerController : MonoBehaviour
             Vector3 direction = displacement.normalized;
 
             entityOther.MoveTo(transform.position + direction);
+        }
+        else
+        {
+            EmoteSystemManager.instance.CreateEmote(entityOther.transform, "exclamations");
         }
 
         rope.AnimateRopeFollowTransform(_lassoedEntity.transform);
