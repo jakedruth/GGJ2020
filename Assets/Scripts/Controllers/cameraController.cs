@@ -48,6 +48,9 @@ public class cameraController : MonoBehaviour
 
     private void followTarget()
     {
+        if (targetToFollow == null)
+            return;
+
         transform.position = Vector3.Lerp(transform.position, 
             new Vector3(targetToFollow.position.x, targetToFollow.position.y, transform.position.z), 
             moveSpeed * Time.deltaTime);
