@@ -105,7 +105,6 @@ public class AnimalController : MonoBehaviour
     public void EatOther(AnimalController otherAnimal)
     {
         SoundManager.instance.Play("Crunch");
-        print("yum");
         Destroy(otherAnimal.gameObject);
     }
 
