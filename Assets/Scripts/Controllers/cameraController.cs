@@ -12,12 +12,12 @@ public class cameraController : MonoBehaviour
     public float zoomSpeed;
     public float moveSpeed;
 
-    private Camera camera;
+    private Camera _cam;
 
     // Start is called before the first frame update
     void Start()
     {
-        camera = Camera.main;
+        _cam = Camera.main;
     }
 
     // Update is called once per frame
@@ -26,19 +26,22 @@ public class cameraController : MonoBehaviour
         controlZoom();
         followTarget();
     }
+
     public void setNewTarget(Transform newTarget)
     {
         targetToFollow = newTarget;
     }
+
     private void controlZoom()
     {
         if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
             zoomPercentage -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
             zoomPercentage = Mathf.Clamp01(zoomPercentage);
-            camera.orthographicSize = zoomMinMax.Lerp(zoomPercentage);
+            _cam.orthographicSize = zoomMinMax.Lerp(zoomPercentage);
         }
     }
+
     private void followTarget()
     {
         transform.position = Vector3.Lerp(transform.position, 

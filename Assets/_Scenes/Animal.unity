@@ -211,11 +211,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8016873954535182333, guid: 3b84ff7a045b7ba4ca8da319bf669070,
-        type: 3}
-      propertyPath: m_Name
-      value: sprite
-      objectReference: {fileID: 0}
     - target: {fileID: 8016873954603267418, guid: 3b84ff7a045b7ba4ca8da319bf669070,
         type: 3}
       propertyPath: m_Name
@@ -285,11 +280,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4592023276995104539, guid: 460641e7e5e1ae944950a5c152e5cb51,
-        type: 3}
-      propertyPath: m_Name
-      value: sprite
-      objectReference: {fileID: 0}
     - target: {fileID: 4592023277096263377, guid: 460641e7e5e1ae944950a5c152e5cb51,
         type: 3}
       propertyPath: m_Name
@@ -359,11 +349,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4592023276995104539, guid: 1118d6ccedc104f46acd63b2d3b480d1,
-        type: 3}
-      propertyPath: m_Name
-      value: sprite
-      objectReference: {fileID: 0}
     - target: {fileID: 4592023277096263377, guid: 1118d6ccedc104f46acd63b2d3b480d1,
         type: 3}
       propertyPath: m_Name

@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 15
-  isPushable: 0
-  isPullable: 0
+  isPushable: 1
+  isPullable: 1
 --- !u!114 &9087449123367549733
 MonoBehaviour:
   m_ObjectHideFlags: 0
