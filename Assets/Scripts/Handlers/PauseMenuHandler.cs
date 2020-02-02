@@ -22,17 +22,19 @@ public class PauseMenuHandler : MonoBehaviour
     }
     public void ToggleMusic(string name)
     {
+        SoundManager.instance.Play("Button");
         transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(!transform.GetChild(0).GetChild(0).GetChild(0).gameObject.activeInHierarchy);
         transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(!transform.GetChild(0).GetChild(0).GetChild(1).gameObject.activeInHierarchy);
         SoundManager.instance.Mute(name);
     }
     public void ToggleSFX(string name)
     {
-
+        SoundManager.instance.Play("Button");
     }
 
     public void togglePause()
     {
+        SoundManager.instance.Play("Button");
         GameManager.instance.TogglePause();
     }
     public void onTogglePause(bool value)
@@ -41,10 +43,12 @@ public class PauseMenuHandler : MonoBehaviour
     }
     public void ReturnHome()
     {
+        SoundManager.instance.Play("Button");
         SceneManager.LoadScene("MainMenu");
     }
     public void RestartLevel()
     {
+        SoundManager.instance.Play("Button");
         GameManager.instance.SetPause(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

@@ -22,11 +22,13 @@ public class LevelSelectHandler : MonoBehaviour
     }
     public void SelectLevel(int level)
     {
+        SoundManager.instance.Play("Button");
         SceneManager.LoadScene(level + 1);
         GameManager.instance.SetPause(false);
     }
     public void ReturnHome()
     {
+        SoundManager.instance.Play("Button");
         SceneManager.LoadScene("MainMenu");
     }
 }
