@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     // variables
     public RopeController rope;
+    public bool canUseRope;
     public float ropeLength;
     private bool isRopeAnimating;
     
@@ -65,7 +66,7 @@ public class PlayerController : MonoBehaviour
                 EntityBase.MoveTo(pos + input);
             }
         }
-        else
+        else if(canUseRope)
         {
             // show aiming
             if (_lassoedEntity != null)
@@ -80,7 +81,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (canUseRope && Input.GetKeyUp(KeyCode.Space))
         {
             if (_lassoedEntity == null && !isRopeAnimating)
             {
@@ -158,5 +159,10 @@ public class PlayerController : MonoBehaviour
         {
             RetractRope();
         }
+    }
+
+    public void SetCanUseRope(bool value)
+    {
+        canUseRope = value;
     }
 }
