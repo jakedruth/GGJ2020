@@ -85,6 +85,9 @@ public class EmoteSystemManager : MonoBehaviour
     {
         while (emote != null)
         {
+            if (followTransfrom == null)
+                break;
+
             emote.transform.position = followTransfrom.position + Vector3.up * 0.6f;
 
             yield return null;

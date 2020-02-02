@@ -14,8 +14,11 @@ public class EntityBase : MonoBehaviour
     public bool isPushable;
     public bool isPullable;
 
-    public bool IsFollowing { get { return _followingEntity != null; } }
     private EntityBase _followingEntity;
+    public bool IsFollowing { get { return _followingEntity != null; } }
+    
+    private EntityBase _beingFollowedBy;
+    public bool IsBeingFollowed { get { return _beingFollowedBy != null; } }
 
     public Coroutine MovingCoroutine { get; private set; }
 
@@ -26,20 +29,20 @@ public class EntityBase : MonoBehaviour
         _bounds = GetComponent<BoxCollider2D>();
     }
 
-    public bool MoveTo(Vector3 targetPoint, bool ignoreRaycast = false)
+    public bool TryMoveTo(Vector3 targetPoint)
     {
         // Check if moving
         if (MovingCoroutine != null)
             return false;
 
-        if (ignoreRaycast)
-        {
-            if (OnMove != null)
-                OnMove.Invoke(transform.position, targetPoint);
+        //if (ignoreRaycast)
+        //{
+        //    if (OnMove != null)
+        //        OnMove.Invoke(transform.position, targetPoint);
 
-            MovingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
-            return true;
-        }
+        //    MovingCoroutine = StartCoroutine(MoveToPosition(targetPoint));
+        //    return true;
+        //}
 
         // Check to see if there is an open spot
         Vector3 dir = targetPoint - transform.position;
@@ -71,6 +74,7 @@ public class EntityBase : MonoBehaviour
         }
         else if (otherCollider.transform != transform)
         {
+            EntityBase other = otherCollider.transform.GetComponent<EntityBase>();
             switch (otherCollider.transform.tag)
             {
                 //default:
@@ -80,28 +84,28 @@ public class EntityBase : MonoBehaviour
                     break;
                 case "Food":
                 case "Animal":
-                    EntityBase other = otherCollider.transform.GetComponent<EntityBase>();
-                    if (other != null && other.MovingCoroutine != null)
+                    if (other == null || other.MovingCoroutine != null)
                     {
-                        canMove = true;
-                        bounce = false;
+                        canMove = false;
+                        bounce = true;
                     }
                     else
                     {
                         if (other.isPushable)
                         {
-                            if (other.Push(dir))
+                            if (other.TryPush(dir))
                             {
                                 canMove = true;
                                 bounce = false;
                             }
                             else
                             {
-                                if(other.tag == "Animal")
+                                if (other.tag == "Animal")
+                                {
                                     EmoteSystemManager.instance.CreateEmote(other.transform, "faceAngry");
-                                
+                                }
                                 canMove = false;
-                                bounce = false;
+                                bounce = true;
                             }
                         }
                         else
@@ -113,6 +117,41 @@ public class EntityBase : MonoBehaviour
                     }
                     break;
                 case "Item":
+                    // if you are the player, pick it up
+                    // if you are an animal, try to push it
+                    if (other == null || other.MovingCoroutine != null)
+                    {
+                        canMove = false;
+                        bounce = true;
+                    }
+                    else if (tag == "Player")
+                    {
+                        canMove = true;
+                        bounce = false;
+                        other.GetComponent<ItemController>().PickUp();
+                    }
+                    else
+                    {
+                        if (other.isPushable)
+                        {
+                            if (other.TryPush(dir))
+                            {
+                                canMove = true;
+                                bounce = false;
+                            }
+                            else
+                            {
+                                canMove = false;
+                                bounce = true;
+                            }
+                        }
+                        else
+                        {
+                            //EmoteSystemManager.instance.CreateEmote(other.transform, "anger");
+                            canMove = false;
+                            bounce = true;
+                        }
+                    }
                     break;
             }
         }
@@ -134,9 +173,9 @@ public class EntityBase : MonoBehaviour
         return canMove;
     }
 
-    public bool Push(Vector3 direction)
+    public bool TryPush(Vector3 direction)
     {
-        return MoveTo(transform.position + direction.normalized);
+        return TryMoveTo(transform.position + direction.normalized);
     }
 
     private IEnumerator MoveToPosition(Vector3 target)
@@ -189,13 +228,18 @@ public class EntityBase : MonoBehaviour
             StopFollowingEntity();
 
         _followingEntity = entity;
+        _followingEntity._beingFollowedBy = this;
+
         entity.OnMove += OnEntityFollowMove;
     }
 
     public void StopFollowingEntity()
     {
-        if(_followingEntity != null)
+        if (_followingEntity != null)
+        {
             _followingEntity.OnMove -= OnEntityFollowMove;
+            _followingEntity._beingFollowedBy = null;
+        }
 
         _followingEntity = null;
     }
@@ -205,14 +249,13 @@ public class EntityBase : MonoBehaviour
         Vector3 direction = end - start;
         Vector3 target = end - direction.normalized;
 
-        bool moved = MoveTo(target, false);
+        bool moved = TryMoveTo(target);
         if(!moved)
         {
             if (_followingEntity.tag != "Player")
             {
                 StopFollowingEntity();
             }
-            //StopFollowingEntity();
         }
     }
 

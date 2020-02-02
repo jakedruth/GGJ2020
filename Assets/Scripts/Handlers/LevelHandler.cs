@@ -34,7 +34,19 @@ public class LevelHandler : MonoBehaviour
             {
                 GameManager.instance.data.levelsBeaten = SceneManager.GetActiveScene().buildIndex - 1;
             }
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+            EmoteSystemManager.instance.CreateEmote(FindObjectOfType<PlayerController>().transform, "faceHappy");
+            StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex + 1));
         }
+    }
+
+    private IEnumerator LoadScene(int index)
+    {
+        yield return new WaitForSeconds(3f);
+
+        if (index < SceneManager.sceneCountInBuildSettings)
+            SceneManager.LoadScene(index);
+        else
+            Debug.Log("Can't load next level");
     }
 }

@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Components
-    public EntityBase EntityBase { get; private set; }
+    public EntityBase Entity { get; private set; }
     public Transform AimCursor;
 
     // variables
@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        EntityBase = GetComponent<EntityBase>();
+        Entity = GetComponent<EntityBase>();
         _lastInput = Vector3.down;
     }
 
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
                 Input.GetKeyDown(KeyCode.W) ||
                 Input.GetKeyDown(KeyCode.S))
             {
-                EntityBase.MoveTo(pos + input);
+                Entity.TryMoveTo(pos + input);
             }
         }
         else if(canUseRope)
@@ -143,13 +143,13 @@ public class PlayerController : MonoBehaviour
             else
                 EmoteSystemManager.instance.CreateEmote(transform, "exclamation");
 
-            _lassoedEntity.FollowEntity(EntityBase);
+            _lassoedEntity.FollowEntity(Entity);
 
             // get direction to entity
             Vector3 displacement = entityOther.transform.position - transform.position;
             Vector3 direction = displacement.normalized;
 
-            entityOther.MoveTo(transform.position + direction);
+            entityOther.TryMoveTo(transform.position + direction);
         }
         else
         {
