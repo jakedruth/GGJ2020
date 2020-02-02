@@ -204,11 +204,9 @@ public class EntityBase : MonoBehaviour
         bool moved = MoveTo(target, false);
         if(!moved)
         {
-            Vector3 distance = target - transform.position;
             if (_followingEntity.tag != "Player")
             {
-                
-                    StopFollowingEntity();
+                StopFollowingEntity();
             }
             //StopFollowingEntity();
         }

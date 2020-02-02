@@ -38,9 +38,14 @@ public class AnimalController : MonoBehaviour
         foreach (Vector3 direction in directions)
         {
             Collider2D otherCollider = Physics2D.OverlapPoint(transform.position + direction);
-            if(otherCollider != null)
+
+            if (otherCollider != null)
             {
-                if (otherCollider.transform.tag == "Animal")
+                if (otherCollider.transform == transform)
+                {
+                    continue;
+                }
+                else if (otherCollider.transform.tag == "Animal")
                 {
                     AnimalController otherAnimal = otherCollider.transform.GetComponent<AnimalController>();
 
