@@ -18,6 +18,10 @@ public class cameraController : MonoBehaviour
     void Start()
     {
         _cam = Camera.main;
+
+        Vector3 pos = targetToFollow.position;
+        pos.z = transform.position.z;
+        transform.position = pos;
     }
 
     // Update is called once per frame

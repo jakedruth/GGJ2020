@@ -20,7 +20,7 @@ public class EntityBase : MonoBehaviour
     private EntityBase _beingFollowedBy;
     public bool IsBeingFollowed { get { return _beingFollowedBy != null; } }
 
-    public Coroutine MovingCoroutine { get; private set; }
+    public Coroutine MovingCoroutine { get; set; }
 
     public UnityAction<Vector3, Vector3> OnMove;
 
