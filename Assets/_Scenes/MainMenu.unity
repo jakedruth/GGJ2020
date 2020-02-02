@@ -1813,10 +1813,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1927891961, guid: 6a3896b91a83f514eb4962a258356b1d, type: 3}
-      propertyPath: sounds.Array.data[1].volume
-      value: 0.15
-      objectReference: {fileID: 0}
     - target: {fileID: 5131779454219836747, guid: 6a3896b91a83f514eb4962a258356b1d,
         type: 3}
       propertyPath: m_LocalPosition.x
