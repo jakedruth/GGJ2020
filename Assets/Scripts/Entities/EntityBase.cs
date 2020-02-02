@@ -30,9 +30,7 @@ public class EntityBase : MonoBehaviour
         if (MovingCoroutine != null)
             return false;
 
-        Collider2D otherCollider = Physics2D.OverlapPoint(targetPoint);
-
-        if (ignoreRaycast || otherCollider.isTrigger)
+        if (ignoreRaycast)
         {
             if (OnMove != null)
                 OnMove.Invoke(transform.position, targetPoint);
@@ -46,6 +44,7 @@ public class EntityBase : MonoBehaviour
         bool canMove = false;
         bool bounce = false;
 
+        Collider2D otherCollider = Physics2D.OverlapPoint(targetPoint);
 
         if (otherCollider == null)
         {
@@ -62,6 +61,11 @@ public class EntityBase : MonoBehaviour
                 canMove = false;
                 bounce = false;
             }
+        }
+        else if (otherCollider.isTrigger)
+        {
+            canMove = true;
+            bounce = false;
         }
         else if (otherCollider.transform != transform)
         {
