@@ -12,10 +12,12 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void playGame()
     {
+        SoundManager.instance.Play("Button");
         SceneManager.LoadScene("LevelSelectMenu");
     }
     public void closeGame()
     {
+        SoundManager.instance.Play("Button");
         GameManager.instance.QuitGame();
     }
 }
