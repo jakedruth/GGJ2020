@@ -105,6 +105,7 @@ public class PlayerController : MonoBehaviour
                             break;
                         case "Food":
                         case "Animal":
+                        case "Item":
                             rope.SendOutRopeToEntity(hit.transform.GetComponent<EntityBase>(), onRopeHitEntity);
                             break;
                     }
@@ -153,7 +154,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            EmoteSystemManager.instance.CreateEmote(entityOther.transform, "anger");
+            if (_lassoedEntity.tag == "Animal")
+                EmoteSystemManager.instance.CreateEmote(entityOther.transform, "anger");
+            else
+                EmoteSystemManager.instance.CreateEmote(transform, "");
         }
 
         rope.AnimateRopeFollowTransform(_lassoedEntity.transform);
