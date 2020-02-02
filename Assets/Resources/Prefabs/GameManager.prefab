@@ -82,3 +82,33 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
+  - name: Pickup
+    clip: {fileID: 8300000, guid: c1f9ccf23ea6e5c479b2d04cc379fd2f, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Pop
+    clip: {fileID: 8300000, guid: 5689847d09b814344a29a8b3c7a36178, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Success
+    clip: {fileID: 8300000, guid: 7fc77f18d45001c43b4de57ac3b8c17b, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Lasso
+    clip: {fileID: 8300000, guid: c91f00475f84d4443afc5966707eabe5, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: False
+    clip: {fileID: 8300000, guid: c41b3ff78a7a3124e915b85ca0767c60, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}

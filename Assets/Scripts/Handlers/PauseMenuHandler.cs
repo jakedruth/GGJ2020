@@ -10,6 +10,17 @@ public class PauseMenuHandler : MonoBehaviour
     {
         transform.GetChild(0).gameObject.SetActive(false);
         GameManager.instance.OnPause += onTogglePause;
+
+        if (GameManager.instance.data.musicIsMuted)
+        {
+            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
+            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -23,8 +34,17 @@ public class PauseMenuHandler : MonoBehaviour
     public void ToggleMusic(string name)
     {
         SoundManager.instance.Play("Button");
-        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(!transform.GetChild(0).GetChild(0).GetChild(0).gameObject.activeInHierarchy);
-        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(!transform.GetChild(0).GetChild(0).GetChild(1).gameObject.activeInHierarchy);
+        GameManager.instance.data.musicIsMuted = !GameManager.instance.data.musicIsMuted;
+        if (GameManager.instance.data.musicIsMuted)
+        {
+            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
+            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false);
+        }
         SoundManager.instance.Mute(name);
     }
     public void ToggleSFX(string name)
