@@ -37,13 +37,13 @@ public class LevelHandler : MonoBehaviour
             {
                 GameManager.instance.data.levelsBeaten = SceneManager.GetActiveScene().buildIndex - 1;
             }
-
             StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex + 1));
         }
     }
 
     private IEnumerator LoadScene(int index)
     {
+        SoundManager.instance.Play("Success");
         EmoteSystemManager.instance.CreateEmote(FindObjectOfType<PlayerController>().transform, "faceHappy", 2f);
         
         yield return new WaitForSeconds(3f);

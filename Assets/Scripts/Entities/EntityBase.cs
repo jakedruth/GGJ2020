@@ -102,6 +102,7 @@ public class EntityBase : MonoBehaviour
                             {
                                 if (other.tag == "Animal")
                                 {
+                                    SoundManager.instance.Play("False");
                                     EmoteSystemManager.instance.CreateEmote(other.transform, "faceAngry");
                                 }
                                 canMove = false;
@@ -110,6 +111,7 @@ public class EntityBase : MonoBehaviour
                         }
                         else
                         {
+                            SoundManager.instance.Play("False");
                             EmoteSystemManager.instance.CreateEmote(other.transform, "anger");
                             canMove = false;
                             bounce = true;
@@ -134,6 +136,7 @@ public class EntityBase : MonoBehaviour
                         {
                             canMove = true;
                             bounce = false;
+                            SoundManager.instance.Play("Pickup");
                             EmoteSystemManager.instance.CreateEmote(transform, "star");
                             break;
                         }
