@@ -44,6 +44,7 @@ public class LevelHandler : MonoBehaviour
 
     private IEnumerator LoadScene(int index)
     {
+        SoundManager.instance.Play("Success");
         EmoteSystemManager.instance.CreateEmote(FindObjectOfType<PlayerController>().transform, "faceHappy", 2f);
         
         yield return new WaitForSeconds(3f);

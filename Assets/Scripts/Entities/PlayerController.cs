@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
         {
             if (_lassoedEntity == null && !isRopeAnimating)
             {
+                SoundManager.instance.Play("Lasso");
                 isRopeAnimating = true;
 
                 Ray2D ray = new Ray2D(transform.position + direction, direction);

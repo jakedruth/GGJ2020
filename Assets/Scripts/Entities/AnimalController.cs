@@ -93,6 +93,7 @@ public class AnimalController : MonoBehaviour
     public void PairWithAnimal(AnimalController otherAnimal)
     {
         Vector3 point = Vector3.Lerp(transform.position, otherAnimal.transform.position, .5f);
+        SoundManager.instance.Play("Pop");
         EmoteSystemManager.instance.CreateEmote(point, "hearts");
 
         Destroy(gameObject);
@@ -101,6 +102,8 @@ public class AnimalController : MonoBehaviour
 
     public void EatOther(AnimalController otherAnimal)
     {
+        SoundManager.instance.Play("Crunch");
+        print("yum");
         Destroy(otherAnimal.gameObject);
     }
 
