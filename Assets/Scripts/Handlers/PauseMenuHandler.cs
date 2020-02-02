@@ -11,16 +11,11 @@ public class PauseMenuHandler : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(false);
         GameManager.instance.OnPause += onTogglePause;
 
-        if (GameManager.instance.data.musicIsMuted)
-        {
-            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
-            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
-        }
-        else
-        {
-            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
-            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false);
-        }
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(GameManager.instance.data.musicIsMuted);
+        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(!GameManager.instance.data.musicIsMuted);
+        
+        transform.GetChild(0).GetChild(1).GetChild(1).gameObject.SetActive(GameManager.instance.data.sfxIsMuted);
+        transform.GetChild(0).GetChild(1).GetChild(0).gameObject.SetActive(!GameManager.instance.data.sfxIsMuted);
     }
 
     // Update is called once per frame
@@ -35,21 +30,27 @@ public class PauseMenuHandler : MonoBehaviour
     {
         SoundManager.instance.Play("Button");
         GameManager.instance.data.musicIsMuted = !GameManager.instance.data.musicIsMuted;
-        if (GameManager.instance.data.musicIsMuted)
-        {
-            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
-            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
-        }
-        else
-        {
-            transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
-            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false);
-        }
+
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(GameManager.instance.data.musicIsMuted);
+        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(!GameManager.instance.data.musicIsMuted);
+
         SoundManager.instance.Mute(name);
     }
-    public void ToggleSFX(string name)
+    public void ToggleSFX()
     {
         SoundManager.instance.Play("Button");
+        GameManager.instance.data.sfxIsMuted = !GameManager.instance.data.sfxIsMuted;
+
+        transform.GetChild(0).GetChild(1).GetChild(1).gameObject.SetActive(GameManager.instance.data.sfxIsMuted);
+        transform.GetChild(0).GetChild(1).GetChild(0).gameObject.SetActive(!GameManager.instance.data.sfxIsMuted);
+
+        foreach (Sound s in SoundManager.instance.sounds)
+        {
+            if (s.name != "Background Music")
+            {
+                SoundManager.instance.Mute(s.name);
+            }
+        }
     }
 
     public void togglePause()

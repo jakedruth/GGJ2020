@@ -3451,12 +3451,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!224 &564823893 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5639844356680816733, guid: 0615dd05ae642e445ae0c409e70068a9,
-    type: 3}
-  m_PrefabInstance: {fileID: 5639844357390579092}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &585063878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8681,18 +8675,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1824022467 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7886449578689949435, guid: 0615dd05ae642e445ae0c409e70068a9,
-    type: 3}
-  m_PrefabInstance: {fileID: 5639844357390579092}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df5ad2210760b7346b0587ad43dfeaf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1828887131
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9811,16 +9793,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5639844356786406480, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1824022467}
-    - target: {fileID: 5639844356786406480, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ReturnHome
-      objectReference: {fileID: 0}
     - target: {fileID: 5639844357148119184, guid: 0615dd05ae642e445ae0c409e70068a9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9931,56 +9903,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5639844357148119188, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639844357679623224, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639844357679623224, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639844357679623224, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639844357679623224, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1824022467}
-    - target: {fileID: 5639844357679623224, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RestartLevel
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639844357679623224, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 5639844357962089778, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1824022467}
-    - target: {fileID: 5639844357962089778, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: togglePause
-      objectReference: {fileID: 0}
-    - target: {fileID: 7886449578689949435, guid: 0615dd05ae642e445ae0c409e70068a9,
-        type: 3}
-      propertyPath: pausePanel
-      value: 
-      objectReference: {fileID: 564823893}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0615dd05ae642e445ae0c409e70068a9, type: 3}
 --- !u!1001 &6600916209074090115
