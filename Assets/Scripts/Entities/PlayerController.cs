@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
         rope.SendOutRopeToPoint(Vector3.zero);
     }
 
-    public void AnimalOnDestroy(AnimalController animal)
+    public void AnimalOnDestroy(EntityBase animal)
     {
         if (animal == _lassoedEntity)
         {
