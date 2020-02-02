@@ -70,7 +70,7 @@ public class AnimalController : MonoBehaviour
 
     public void PairWithAnimal(AnimalController otherAnimal)
     {
-        PlayerController pc = FindObjectOfType<PlayerController>();
+//PlayerController pc = FindObjectOfType<PlayerController>();
         
 
         Destroy(gameObject);
