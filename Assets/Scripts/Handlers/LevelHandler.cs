@@ -5,40 +5,40 @@ using UnityEngine.SceneManagement;
 
 public class LevelHandler : MonoBehaviour
 {
-    public List<AnimalController> animalList;
+    public static LevelHandler current;
+    public int TotalAnimals { get; private set; }
+    public int SavedAnimals { get; private set; }
+    public int RemaingAnimals { get { return TotalAnimals - SavedAnimals; } }
+
     private bool loadingNextScene = false;
+
+    private void Awake()
+    {
+        current = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        foreach (AnimalController animal in FindObjectsOfType<AnimalController>())
-        {
-            animalList.Add(animal);
-        }
+        TotalAnimals = FindObjectsOfType<AnimalController>().Length;
+        SavedAnimals = 0;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    public void SaveAnimal(int amount)
     {
-        if (animalList.Count != 0)
+        SavedAnimals += amount;
+        if(RemaingAnimals == 0)
         {
-            for (int i = animalList.Count - 1; i >= 0; i--)
+            if (!loadingNextScene)
             {
-                if (animalList[i] == null)
+                loadingNextScene = true;
+                if (GameManager.instance.data.levelsBeaten <= SceneManager.GetActiveScene().buildIndex - 2)
                 {
-                    animalList.Remove(animalList[i]);
+                    GameManager.instance.data.levelsBeaten = SceneManager.GetActiveScene().buildIndex - 1;
                 }
-            }
-        }
-        else if(!loadingNextScene)
-        {
-            loadingNextScene = true;
-            if (GameManager.instance.data.levelsBeaten <= SceneManager.GetActiveScene().buildIndex - 2)
-            {
-                GameManager.instance.data.levelsBeaten = SceneManager.GetActiveScene().buildIndex - 1;
-            }
 
-            StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex + 1));
+                StartCoroutine(LoadScene(SceneManager.GetActiveScene().buildIndex + 1));
+            }
         }
     }
 

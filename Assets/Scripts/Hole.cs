@@ -18,6 +18,9 @@ public class Hole : MonoBehaviour
         if (entity.MovingCoroutine != null)
             return;
 
+        if (entity.tag == "Animal" || entity.tag == "Player")
+            EmoteSystemManager.instance.CreateEmote(entity.transform, "faceSad");
+
         entity.MovingCoroutine = StartCoroutine(AnimateFalling(entity));
     }
 
